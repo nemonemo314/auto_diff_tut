@@ -126,7 +126,7 @@ plotar os resultados.
   (define (log10-range start end n-per-decade)
     ;; função que gera um intervalo de [n-per-decade] pontos espaçados de modo uniforme
     ;; em uma decada, em (- [decades] [start]) decadas.
-    (let ([decades (range start 1 decades)]
+    (let ([decades (range start 1 end)]
           [points (range 1 (/ 10 n-per-decade) 10)])
       (apply append
              (map (lambda (decade)
@@ -195,6 +195,9 @@ também pode usar python, R ou sua linguagem favorita para plotar).
 #+RESULTS:
 [[file:./results/img/func-e-deriv.png]]
 
+O bloco abaixo plota a derivada aproximada, utilizando a aproximação "para frente",
+para três valores de h: 1e-9,1e-12 e 1e-15. É possivel ver que a aproximação
+para de funcionar para o menor valor, e se continuassemos a diminuir h ela quebraria completamente.
 
 #+NAME: aprox
 #+begin_src scheme :results output file silent  :file plot-aprox-d.csv 
@@ -227,7 +230,14 @@ também pode usar python, R ou sua linguagem favorita para plotar).
 #+RESULTS:
 [[file:./results/img/aprox-and-exact.png]]
 
+Para observar o comportamento do erro, em relação a derivada "ideal", convém selecionarmos
+um ponto, neste caso \(x = 8\), e variarmos h e o tipo de aproximação. Os codigos abaixo fazem isso
+para os três jeitos de aproximar que vimos anteriormente.
 
+É possível observar que o erro relativo diminui de maneira linear para todos os três, até um certo ponto,
+depois disso ele começa a subir de um jeito errático. Também é possível ver que o erro da aproximação
+centrada é consideravelmente menor. O erro após a "quina" decorre de alguns fatores, mas principalmente
+de arredondamento e de "formula" (pois é uma aproximação).
 #+NAME: log-error
 #+begin_src scheme :results output file   :file plot-log-error.csv 
 
@@ -258,6 +268,7 @@ também pode usar python, R ou sua linguagem favorita para plotar).
   set ylabel "rel. error"
   set logscale x 10
   set logscale y 10
+  set xrange reverse
   #plota a as duas funções
   plot data u 1:2 with line title "forward",\
        data u 1:3 with line title "centered" 
