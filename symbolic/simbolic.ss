@@ -1,18 +1,20 @@
 (define-syntax deriv
-  (syntax-rules (x - + * expt log / exp sin cos tan)
-    [(_ (+ a b)) `(+ ,(deriv a) ,(deriv b))]
-    [(_ (- a b)) `(- ,(deriv a) ,(deriv b))]
-    [(_ (* a b)) `(+ (* ,(deriv a) b) (* a ,(deriv b)))]
-    [(_ (/ a b)) `(/ (- (* ,(deriv a) b) (* a ,(deriv b))) (expt b 2 ))]
-    [(_ (exp a)) `(* (expt a) ,(deriv a))]
-    [(_ (expt a b)) `(+ (* b (* (expt a ,(- b 1)) ,(deriv a)))
-                        (* (expt a b) (* (log a) ,(deriv b))))]
-    [(_ (log a)) `(/ ,(deriv a) a)]
-    [(_ (sin a)) `(* (cos a) ,(deriv a))]
-    [(_ (cos a)) `(* (* -1 (sin a)) ,(deriv a))]
-    [(_ (tan a)) `(* (/ 1 (expt (cos a) 2)) ,(deriv a))]
-    [(_ x) 1]
-    [(_ k) 0]))
+  (lambda (contexto)
+    (syntax-case contexto ( - + * expt log / exp sin cos tan)
+      [(_ var (+ a b)) #'(+ (deriv var a) (deriv var b))] 
+      [(_ var (- a b)) #'(- (deriv var a) (deriv var b))]
+      [(_ var (* a b)) #'(+ (* (deriv var a) b) (* a (deriv var b)))]
+      [(_ var (/ a b)) #'(/ (- (* (deriv var a) b) (* a (deriv var b))) (expt b 2 ))]
+      [(_ var (exp a)) #'(* (expt a) (deriv var a))]
+      [(_ var (expt a b)) #'(+ (* b (* (expt a (- b 1)) (deriv var a)))
+                          (* (expt a b) (* (log a) (deriv var b))))]
+      [(_ var (log a)) #'(/ (deriv var a) a)]
+      [(_ var (sin a)) #'(* (cos a) (deriv var a))]
+      [(_ var (cos a)) #'(* (* -1 (sin a)) (deriv var a))]
+      [(_ var (tan a)) #'(* (/ 1 (expt (cos a) 2)) (deriv var a))]
+      [(_ var v) (if (free-identifier=? #'var #'v) 1 0)])))
 
 
-
+(define-syntax lambda-derive
+  (syntax-rules ()
+    [(_ expr var vars ...) (lambda (var vars ...) (deriv var expr))] ))
