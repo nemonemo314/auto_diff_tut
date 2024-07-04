@@ -2,6 +2,8 @@
   (export derive-symbolic
           lambda-derive-symbolic)
   (import (rnrs))
+
+  ;; Macro que gera expressões não simplificadas para derivação
   (define-syntax derive-symbolic
     (lambda (context)
       (syntax-case context
@@ -37,6 +39,10 @@
         [(_ var (tan a)) #'(* (/ 1 (expt (cos a) 2)) (derive-symbolic var a))]
         [(_ var v) (if (free-identifier=? #'var #'v) 1 0)])))
 
+  ;; Macro que envelopa as expressões de derivação em um lambda
+  ;; (lambda-derive-symbolic expr var vars ...) expande  em  (lambda (var vars ...) (derive-symbolic var expr))
+  ;; Permite utilizar a expressão simbolica para calcular valores numericos. É nescessario informar todas as variaveis.
+  ;; A primeira variavel, var, é o sentido de derivação.
   (define-syntax lambda-derive-symbolic
     (syntax-rules ()
       [(_ expr var vars ...) (lambda (var vars ...) (derive-symbolic var expr))] )))
