@@ -7,18 +7,11 @@
   (define-syntax derive-symbolic
     (lambda (context)
       (syntax-case context ( - + * expt log / exp sin cos tan)
-        ;; operações básicas 
         [(_ var (+ a b)) #'(+ (derive-symbolic var a) (derive-symbolic var b))] 
         [(_ var (- a b)) #'(- (derive-symbolic var a) (derive-symbolic var b))]
         [(_ var (* a b)) #'(+ (* (derive-symbolic var a) b) (* a (derive-symbolic var b)))]
         [(_ var (/ a b)) #'(/ (- (* (derive-symbolic var a) b) (* a (derive-symbolic var b))) (expt b 2 ))]
-        
-        ;; e^f(x) = f(x)' * e^f(x) 
         [(_ var (exp a)) #'(* (expt a) (derive-symbolic var a))]
-        
-        ;; caso geral da regra da potencia
-        ;; polinomial: x^n' = n * x ^ (n-1) * x'
-        ;; constante: k ^ f(X) = ln(k) * k ^ f(x) * f(x)'
         [(_ var (expt a b))
          (cond
           [(and (number? (syntax->datum #'b)) (free-identifier=? #'var #'a)) ; caso polinômio
@@ -27,24 +20,15 @@
            #'(* (expt a b) (* (log a) (derive-symbolic var b)))]
           [else #'(+ (* b (* (expt a (- b 1)) (derive-symbolic var a))) ; caso genérico
                      (* (expt a b) (* (log a) (derive-symbolic var b))))])]
-        
-        ;; ln(x)' = x'/x
-        [(_ var (log a)) #'(/ (derive-symbolic var a) a)]
-        
-        ;; trigonométricas
-        ;; sin(x)' = cos x
-        ;; cos(x)' = -sin(x)
-        ;; tg(x)'  = 1/sec(x)^2 
+        [(_ var (log a)) #'(/ (derive-symbolic var a) a)]    
         [(_ var (sin a)) #'(* (cos a) (derive-symbolic var a))] 
         [(_ var (cos a)) #'(* (* -1 (sin a)) (derive-symbolic var a))] 
         [(_ var (tan a)) #'(* (/ 1 (expt (cos a) 2)) (derive-symbolic var a))]
-        [(_ var v) (if (free-identifier=? #'var #'v) 1 0)])))
+        [(_ var v) (cond [(number? (syntax->datum #'v)) 0]
+                         [(free-identifier=? #'var #'v) 1]
+                         [else 0])])))
 
   (define-syntax lambda-derive-symbolic
-  ;; Macro que envelopa as expressões de derivação em um lambda
-  ;; (lambda-derive-symbolic expr var vars ...) expande  em  (lambda (var vars ...) (derive-symbolic var expr))
-  ;; Permite utilizar a expressão simbólica para calcular valores numéricos. É necessário informar todas as variáveis.
-  ;; A primeira variável, var, é o sentido de derivação.
     (syntax-rules ()
-      [(_ expr var vars ...) (lambda (var vars ...) (derive-symbolic var expr))] )))
+      [(_ expr var vars ...) (lambda (var vars ...) (derive-symbolic var expr))])))
 
