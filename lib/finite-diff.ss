@@ -1,9 +1,10 @@
-(meta define (list-index lst proc)
-  (let loop ([acc lst]
-             [i 0])
-    (cond [(null? acc) #f]
-          [(proc (car acc)) i]
-          [else (loop (cdr acc) (+ 1 i))])))
+
+(meta (define list-index lst proc)
+      (let loop ([acc lst]
+                 [i 0])
+        (cond [(null? acc) #f]
+              [(proc (car acc)) i]
+              [else (loop (cdr acc) (+ 1 i))])))
 
 (define-syntax lambda-derive-finite-diff
   (lambda (context)
