@@ -1,4 +1,4 @@
-(define (list-index lst proc)
+(meta define (list-index lst proc)
   (let loop ([acc lst]
              [i 0])
     (cond [(null? acc) #f]
