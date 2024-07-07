@@ -1,5 +1,5 @@
 (library (test utils)
-  (export within-bound? make-test-set test-assert test-equal? test-within-bound?)
+  (export within-bound?  test-assert test-equal? test-within-bound? make-test-set)
   (import (rnrs)
           (only (chezscheme) format set-car! set-cdr!))
 
@@ -9,9 +9,9 @@
 
   (define-syntax make-test-set
     (syntax-rules ()
-      [(make-test-case name  (test test* ...))
-       (define (name)
-         (let* [(test-log  (format #f "-**- Starting test-set: ~a -**-~%" 'name))
+      [(make-test-case name (test test* ...))
+       (lambda ()
+         (letrec [(test-log  (format #f "-***- Starting test-set ~a -***-~%" 'name))
                (test-count (length (list test test* ...)))
                (tally (cons 0 0))]
            
@@ -20,14 +20,17 @@
            (format #t "~a" test-log)))]
       
       [(make-test-case name  ((init expr) ...) (test test* ...))
-       (define (name)
-         (let* [(test-log  (format #f "-**- Starting test-set: ~a -**-~%" 'name))
+       (lambda ()
+         (letrec [(test-log  (format #f "-**- Starting test-set: ~a -**-~%" 'name))
                (test-count (length (list test test* ...)))
                (tally (cons 0 0))
                (init expr) ...]
-           
            (set! test-log (string-append test-log (format #f "~a has ~a tests~%" 'name test-count)))
            (for-each (lambda (c) (run-and-report-case test-log tally c)) (list test test* ...))
+           (set! test-log
+             (string-append test-log
+                            (format #f "-***- Test set ~a ended with ~a failures and ~a successes -***-~%"
+                                    'name (cdr tally) (car tally))))
            (format #t "~a" test-log)))]))
 
   (define-syntax run-and-report-case
@@ -46,7 +49,7 @@
 
   (define-syntax test-assert
     (syntax-rules ()
-      [(test-assert exp1)
+      [(_ exp1)
        (lambda ()
          (if exp1
              (values #t (format #f "~a is true~%" 'exp1))
@@ -54,7 +57,7 @@
 
   (define-syntax test-equal?
     (syntax-rules ()
-      [(test-equal? exp1 exp2)
+      [(_ exp1 exp2)
        (lambda ()
          (if (equal? exp1 exp2)
              (values #t
@@ -69,5 +72,3 @@
          (if (within-bound? b v gd)
              (values #t (format #f "~a => ~a ~%~a => ~a~%~a is within a +-~a bound from ~a~%" 'v v 'gd gd v b gd))
              (values #f (format #f "~a => ~a ~%~a => ~a~%~a is outside a +-~a bound from ~a~%" 'v v 'gd gd v b gd))))])))
-
-
