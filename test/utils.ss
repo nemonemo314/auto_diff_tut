@@ -15,13 +15,13 @@
                (test-count (length (list test test* ...)))
                (tally (cons 0 0))]
            
-           (set! test-log (string-append test-log (format #f "~a has ~a tests~%" 'name test-count)))
+           (set! test-log (string-append test-log (format #f "-***- ~a has ~a tests~% -***-" 'name test-count)))
            (for-each (lambda (c) (run-and-report-case test-log tally c)) (list test test* ...))
            (format #t "~a" test-log)))]
       
       [(make-test-case name  ((init expr) ...) (test test* ...))
        (lambda ()
-         (letrec [(test-log  (format #f "-**- Starting test-set: ~a -**-~%" 'name))
+         (letrec [(test-log  (format #f "-***- Starting test-set: ~a -***-~%" 'name))
                (test-count (length (list test test* ...)))
                (tally (cons 0 0))
                (init expr) ...]
