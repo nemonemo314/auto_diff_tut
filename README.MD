@@ -17,13 +17,12 @@ mudar. Por enquanto as coisas estão assim:
 
 # Como rodar?
 Atualmente as coisas não estão prontas, então basicamente só rode os arquivos.
-No caso do codigo em /lib voce precisa importa-lo utilizando (import (lib
-<nome-da-lib>)), poderá então acessar os simbolos definidos neles.
+No caso do codigo em /lib voce precisa importa-lo utilizando (import (lib nome-da-lib )), poderá então acessar os simbolos definidos neles.
 
 ## Testes
 Para o rodar os testes chame no terminal:
 ``` bash
-chezscheme "test/<meu-teste>"
+chezscheme "test/meu-teste.ss"
 ```
 Ou no repl:
 ``` scheme
