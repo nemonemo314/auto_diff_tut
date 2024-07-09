@@ -11,7 +11,7 @@ mudar. Por enquanto as coisas estão assim:
   que implementam aproximação por diferenças finitas multivariada. Espero que
   tanto a simbolica, quanto a autodiff estejam aqui em breve.
 - symbolic: codigo referente a diferenciação simbolica apresentado no video 4
- e 5. =bold= Em breve sera movido para a pasta lib. =bold=
+ e 5.  Em breve sera movido para a pasta lib. 
 - tests: contem utils.ss que tem funções auxiliares e uma framework de tests
   feita com cuspe e fita adesiva entre os videos.
 
@@ -22,11 +22,10 @@ No caso do codigo em /lib voce precisa importa-lo utilizando (import (lib
 
 * Testes
 Para o rodar os testes chame no terminal:
-''' bash
+``` bash
 chezscheme "test/<meu-teste>"
-'''
-
+```
 Ou no repl:
-''' scheme
+``` scheme
 (load "test/<meu-teste>")
-'''
+```
