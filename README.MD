@@ -22,10 +22,11 @@ No caso do codigo em /lib voce precisa importa-lo utilizando (import (lib
 
 * Testes
 Para o rodar os testes chame no terminal:
-#+BEGIN_SRC bash
+''' bash
 chezscheme "test/<meu-teste>"
-#+END_SRC
+'''
+
 Ou no repl:
-#+BEGIN_SRC scheme
+''' scheme
 (load "test/<meu-teste>")
-#+END_SRC
+'''
