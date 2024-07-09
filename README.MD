@@ -1,9 +1,9 @@
-* Intro
+# Intro
 Olá, seja bem vindo, esse repo contem as coisas apresentadas nos videos, além de
 codigo adicionado "fora da tela", como casos de teste e rescritas do conteudo do
 notebook em forma de bilbliotecas.
 
-* Estrutura
+# Estrutura
 Ainda estou construindo o diretorio, e os videos, portanto as coisas podem
 mudar. Por enquanto as coisas estão assim:
 - Introducao: conteudo dos primeiros videos na forma de notebook
@@ -15,7 +15,7 @@ mudar. Por enquanto as coisas estão assim:
 - tests: contem utils.ss que tem funções auxiliares e uma framework de tests
   feita com cuspe e fita adesiva entre os videos.
 
-* Como rodar?
+# Como rodar?
 Atualmente as coisas não estão prontas, então basicamente só rode os arquivos.
 No caso do codigo em /lib voce precisa importa-lo utilizando (import (lib
 <nome-da-lib>)), poderá então acessar os simbolos definidos neles.
