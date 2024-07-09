@@ -33,6 +33,6 @@
     (unitary-function-1)
     (multivariate-function-1)))
 
-(eval-when (load eval visit)
+(eval-when (eval load)
   (import (test finite-diff))
   (run-all))
